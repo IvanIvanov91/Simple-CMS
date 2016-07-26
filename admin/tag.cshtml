@@ -1,0 +1,54 @@
+﻿@{
+    Page.Title = "Тагове";
+    Layout = "~/admin/_AdminLayout.cshtml";
+
+    var mode = Tag.Mode;
+
+    if (!WebUser.HasRole(UserRoles.Admin) &&
+        !WebUser.HasRole(UserRoles.Editor))
+    {
+        Response.Redirect("~/admin/");
+    }
+
+}
+@if (!mode.IsEmpty())
+{
+    var tag = Tag.Current;
+
+    <div>
+        <form name="tag" method="post" action="~/admin/tag.ashx">
+            @AntiForgery.GetHtml()
+            <input type="hidden" id="mode" name="mode" value="@mode" />
+            <input type="hidden" id="tagId" name="tagId" value="@tag.Id" />
+            <p>
+                <label for="tagName">Име:</label>
+                <input type="text" id="tagName" name="tagName" value="@tag.Name" required autofocus/>
+            </p>
+            <p>
+                <label for="tagFriendlyName">URL име:</label>
+                <input type="text" id="tagFriendlyName" name="tagFriendlyName" value="@tag.UrlFriendlyName" />
+            </p>
+            <p><input type="submit" name="tagSubmit" value="Submit" /></p>
+        </form>
+    </div>
+}
+else
+{
+    @AntiForgery.GetHtml()
+
+    <p><a href="~/admin/tag/new/">Нов таг</a></p>
+    var grid = new WebGrid(
+        source: TagRepository.GetAll(orderBy: "Name"),
+        rowsPerPage: 30);
+
+        @grid.GetHtml(
+    columns: grid.Columns(
+    grid.Column(format: @<a href="~/admin/tag/edit/@item.UrlFriendlyName">Edit</a>),
+    grid.Column(format: @<a data-mode="delete" data-action="/admin/tag.ashx" data-item="@item.UrlFriendlyName" href="~/admin/tag/delete/@item.UrlFriendlyName">Delete</a>),
+        grid.Column("Name", header: "Име"),
+            grid.Column("UrlFriendlyName", header: "URL име")
+
+                            )
+                        );
+}
+

@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@Page.Title</title>
+    <link href="~/css/site.css" rel="stylesheet" type="text/css" />
+    @RenderSection("head", required: false)
+</head>
+<body>
+    <header>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p class="site-title"><a href="~/">Моят блог</a></p>
+            </div>
+            <div class="float-right">
+                <nav>
+                    <ul id="menu">
+                        <li><a href="~/">Начало</a></li>
+                        <li><a href="~/admin/">Админ панел</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div id="body">
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p>&copy; @DateTime.Now.Year - Блогът на Иван Иванов</p>
+            </div>
+        </div>
+    </footer>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

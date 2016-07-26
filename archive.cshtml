@@ -1,0 +1,42 @@
+﻿@{
+    Page.Title = "Архив";
+    Layout = "~/_SiteLayout.cshtml";
+
+    var mode = Tag.Mode;
+}
+<div>
+    @if (mode == "post")
+    {
+        @RenderPage("~/_post.cshtml", Post.Current, new MarkdownSharp.Markdown())
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+
+        var disqus_shortname = 'myblogproject';
+        (function () {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    }
+    else if (mode == "tag")
+    {
+        var posts = PostRepository.GetPublishedPostsByTag(Tag.FriendlyName);
+
+        foreach (var post in posts)
+        {
+            @RenderPage("~/_post.cshtml", post, new MarkdownSharp.Markdown());
+        }
+    }
+    else if (string.IsNullOrEmpty(mode))
+    {
+        var posts = PostRepository.GetPublishedPosts();
+
+        foreach (var post in posts)
+        {
+            @RenderPage("~/_post.cshtml", post, new MarkdownSharp.Markdown());
+        }
+    }
+</div>

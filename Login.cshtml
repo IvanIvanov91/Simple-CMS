@@ -1,0 +1,30 @@
+﻿@{
+    Page.Title = "Вход";
+    Layout = "~/_SiteLayout.cshtml";
+
+    var message = string.Empty;
+
+    if (IsPost)
+    {
+        var username = Request.Form["username"];
+        var password = Request.Form["password"];
+
+        if (WebUser.AuthenticateAndLogin(username, password))
+        {
+            Response.Redirect("~/admin/");
+        }
+
+        message = "Грешно потребителско име или парола.";
+    }
+}
+<div>
+    <div class="error">@message</div>
+    <form name="login" method="post">
+        <p>
+            <label for="username">Потребитеско име:</label>
+            <input type="text" id="username" name="username" />
+        </p>
+        <p><label for="password">Парола:</label> <input type="password" id="password" name="password" /></p>
+        <p><input type="submit" value="Login" /></p>
+    </form>
+</div>
